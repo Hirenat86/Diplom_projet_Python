@@ -17,6 +17,7 @@ USER_TYPE_CHOICES = (
     ('buyer', 'Покупатель'),
 )
 
+
 class User(models.Model):
     name = models.CharField(max_length=50, verbose_name='Имя пользователя')
     type = models.CharField(verbose_name='Тип пользователя', choices=USER_TYPE_CHOICES, max_length=5, default='buyer')
@@ -37,7 +38,6 @@ class Shop(models.Model):
     user = models.OneToOneField(User, verbose_name='Пользователь',
                                 blank=True, null=True,
                                 on_delete=models.CASCADE)
-    # что это
     filename = models.CharField(max_length=50, verbose_name='Filename')
 
     class Meta:
@@ -81,8 +81,7 @@ class ProductInfo(models.Model):
                                 on_delete=models.CASCADE)
     shop = models.ForeignKey(Shop, verbose_name='Магазин', related_name='product_infos', blank=True,
                              on_delete=models.CASCADE)
-
-    name = None #где взять
+    model = models.CharField(max_length=80, verbose_name='Модель')
     quantity = models.PositiveIntegerField(verbose_name='Количество')
     price = models.PositiveIntegerField(verbose_name='Цена')
     price_rrc = models.PositiveIntegerField(verbose_name='Рекомендуемая розничная цена')
@@ -147,6 +146,7 @@ class OrderItem(models.Model):
 
 
 class Contact(models.Model):
+    address = models.CharField(verbose_name='Адрес', max_length=200)
     user = models.ForeignKey(User, verbose_name='Пользователь',
                              related_name='contacts', blank=True,
                              on_delete=models.CASCADE)
