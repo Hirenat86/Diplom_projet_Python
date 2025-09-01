@@ -1,9 +1,8 @@
 import yaml
 from yaml.loader import SafeLoader
-
+from pytils.translit import slugify
 from django.core.management.base import BaseCommand
-from orders.orders_app.models import Shop, Category, Product, ProductInfo, Parameter, \
-    ProductParameter
+from orders_app.models import (Shop, Category, Product, ProductInfo, Parameter, ProductParameter)
 
 
 class Command(BaseCommand):
@@ -11,53 +10,62 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
-        file_name = 'shop1.yaml'
+        file_name = 'orders/shop1.yaml'
         with open(file_name, 'r', encoding='utf-8') as file:
             data = yaml.load(file, Loader=SafeLoader)
 
-        # наполняем модель Shop
-        Shop.objects.create(
-            name=data['shop'],
-            filename=file_name,)
+        shop, _ = Shop.objects.update_or_create(name=data['shop'],)
 
-        # наполняем модель Category
         for item in data['categories']:
-            Category.objects.create(
+            category, _ = Category.objects.update_or_create(
                 id=item['id'],
                 name=item['name'],
-                #shops= ?
+                slug=slugify(item['name'])
             )
+            category.shops.add(shop.id)
+            category.save()
 
-        # наполняем модель Product
         for item in data['goods']:
-            Product.objects.create(
+            try:
+                category = Category.objects.get(id=item['category'])
+            except Category.DoesNotExist:
+                self.stdout.write(
+                    self.style.ERROR(f"Категория с id={item['category']} не найдена. Пропускаем товар id={item['id']}"))
+                continue
+
+            Product.objects.update_or_create(
                 id=item['id'],
-                category=item['category'],
+                category=category,
             )
 
         # наполняем модель ProductInfo
         for item in data['goods']:
-            ProductInfo.objects.create(
-                # product= ?
-                # shop= ?
-                # name = ?
+            try:
+                category = Category.objects.get(id=item['category'])
+            except Category.DoesNotExist:
+                self.stdout.write(
+                    self.style.ERROR(f"Категория с id={item['category']} не найдена. Пропускаем товар id={item['id']}"))
+                continue
+
+            product, created = Product.objects.update_or_create(
+                id=item['id'],
+                defaults={
+                    'category': category,
+                    'name': item['name'],
+                    'slug': slugify(item['name'])
+                }
+            )
+            product_info, _ = ProductInfo.objects.update_or_create(
+                product_id=product.id,
+                shop_id=shop.id,
                 model=item['model'],
                 quantity=item['quantity'],
                 price=item['price'],
                 price_rrc=item['price_rrc']
             )
 
-        # наполняем модель Parameter, ProductParameter
-        for item in data['goods']:
-
-            params_dict = item['parameters']
-            for parameter in list(params_dict.keys()):
-                Parameter.objects.create(
-                    name=parameter
-                )
-
-                ProductParameter.objects.create(
-                    # product_info = ?
-                    # parameter = ?
-                    value=params_dict[parameter]
-                )
+        for name, value in item['parameters'].items():
+            parameter, _ = Parameter.objects.update_or_create(name=name)
+            ProductParameter.objects.update_or_create(product_info_id=product_info.id,
+                                            parameter_id=parameter.id,
+                                            value=value)
