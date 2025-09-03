@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from django.shortcuts import render, get_object_or_404
-
+from django.contrib.auth.decorators import login_required
 from .models import Category, ProductInfo, Product
 from .serializers import ProductInfoSerializer
 from cart.forms import CartAddProductForm
@@ -10,6 +10,7 @@ from cart.forms import CartAddProductForm
 #     queryset = ProductInfo.objects.all()
 #     serializer_class = ProductInfoSerializer
 
+@login_required()
 def product_list(request, category_slug=None):
     category = None
     categories = Category.objects.all()
