@@ -1,2 +1,11 @@
 Django==4.2.19
+asgiref==3.9.1
+backend==0.2.4.1
+django-nested-inline==0.4.6
+django-rest-passwordreset==1.5.0
+djangorestframework==3.16.1
+psycopg2-binary==2.9.10
+pytils==0.4.4
 pytz==2018.5
+PyYAML==6.0.2
+sqlparse==0.5.3

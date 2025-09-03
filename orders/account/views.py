@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 
 from account.forms import LoginForm, UserRegistrationForm
@@ -17,7 +18,21 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             # Save the User object
             new_user.save()
-            new_user.groups.add(user_form.cleaned_data['groups'])
+            # new_user.groups.add(user_form.cleaned_data['groups'])
+
+            # sending registration notification
+            subject = 'Уведомление о регистрации на платформе'
+            message = f'Вы успешно зарегистрировались!'
+            from_email = 'hirenat86@gmail.com'
+            to_email = user_form.cleaned_data['email']
+
+            send_mail(
+                subject,
+                message,
+                from_email,
+                [to_email],
+                fail_silently=False,
+            )
 
             return render(request,
                           'account/register_done.html',
