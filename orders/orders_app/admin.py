@@ -3,6 +3,12 @@ from nested_inline.admin import NestedStackedInline, NestedModelAdmin
 from .models import Shop, Category, Product, ProductInfo, ProductParameter
 
 
+@admin.register(Shop)
+class ShopAdmin(admin.ModelAdmin):
+    model = Shop
+    list_display = ['id', 'name', 'user']
+    list_editable = ['name', 'user']
+
 class ProductParameterInline(NestedStackedInline):
     model = ProductParameter
 

@@ -17,6 +17,8 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             # Save the User object
             new_user.save()
+            new_user.groups.add(user_form.cleaned_data['groups'])
+
             return render(request,
                           'account/register_done.html',
                           {'new_user': new_user})
