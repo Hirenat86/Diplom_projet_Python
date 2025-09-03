@@ -129,6 +129,12 @@ CART_SESSION_ID = 'cart'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #Вывод емайл сообщения в консоль для проверки
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'hirenat86@gmail.com'
+EMAIL_HOST_PASSWORD = 'czxczffsdfsfasda'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
