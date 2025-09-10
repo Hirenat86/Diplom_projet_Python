@@ -29,8 +29,16 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    #HTML route
     path('cart/', include('cart.urls', namespace='cart')),
     path('orders/', include('order_func.urls', namespace='order_func')),
     path('', include('orders_app.urls', namespace='orders_app')),
     path('account/', include('account.urls')),
+
+    # REST API route
+    path("api/orders_app/", include("orders_app.urls_api")),
+    path("api/cart/", include("cart.urls_api")),
+    path("api/order_func/", include("order_func.urls_api")),
+    path("api/account/", include("account.urls_api")),
 ]
