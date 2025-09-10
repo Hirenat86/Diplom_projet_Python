@@ -1,6 +1,8 @@
 from rest_framework import viewsets
+
 from .models import Order, OrderItem
-from .serializers import OrderSerializer, OrderItemSerializer
+from .serializers import OrderItemSerializer, OrderSerializer
+
 
 class OrderViewSet(viewsets.ModelViewSet):
     """
@@ -11,12 +13,15 @@ class OrderViewSet(viewsets.ModelViewSet):
     PUT /orders_func/orders/{id}/ — обновить заказ
     DELETE /orders_func/orders/{id}/ — удалить заказ
     """
+
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
 
 class OrderItemViewSet(viewsets.ModelViewSet):
     """
     CRUD для позиций заказа
     """
+
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer

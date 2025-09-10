@@ -6,57 +6,57 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('orders_app', '0001_initial'),
+        ("orders_app", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='contact',
-            name='user',
+            model_name="contact",
+            name="user",
         ),
         migrations.RemoveField(
-            model_name='order',
-            name='user',
+            model_name="order",
+            name="user",
         ),
         migrations.RemoveField(
-            model_name='orderitem',
-            name='order',
+            model_name="orderitem",
+            name="order",
         ),
         migrations.RemoveField(
-            model_name='orderitem',
-            name='product',
+            model_name="orderitem",
+            name="product",
         ),
         migrations.RemoveField(
-            model_name='orderitem',
-            name='shop',
+            model_name="orderitem",
+            name="shop",
         ),
         migrations.AddField(
-            model_name='category',
-            name='slug',
+            model_name="category",
+            name="slug",
             field=models.SlugField(max_length=200, null=True),
         ),
         migrations.AddField(
-            model_name='product',
-            name='slug',
+            model_name="product",
+            name="slug",
             field=models.SlugField(max_length=200, null=True),
         ),
         migrations.AddField(
-            model_name='productinfo',
-            name='model',
-            field=models.CharField(default=1, max_length=80, verbose_name='Модель'),
+            model_name="productinfo",
+            name="model",
+            field=models.CharField(default=1, max_length=80, verbose_name="Модель"),
             preserve_default=False,
         ),
         migrations.AddIndex(
-            model_name='category',
-            index=models.Index(fields=['name'], name='orders_app__name_58f806_idx'),
+            model_name="category",
+            index=models.Index(fields=["name"], name="orders_app__name_58f806_idx"),
         ),
         migrations.DeleteModel(
-            name='Contact',
+            name="Contact",
         ),
         migrations.DeleteModel(
-            name='Order',
+            name="Order",
         ),
         migrations.DeleteModel(
-            name='OrderItem',
+            name="OrderItem",
         ),
     ]

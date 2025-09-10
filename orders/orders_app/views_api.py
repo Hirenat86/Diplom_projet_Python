@@ -1,9 +1,10 @@
 from rest_framework import viewsets
-from .models import Shop, Category, Product, ProductInfo, Parameter, ProductParameter
-from .serializers import (
-    ShopSerializer, CategorySerializer, ProductSerializer,
-    ProductInfoSerializer, ProductParameterSerializer
-)
+
+from .models import Category, Product, ProductInfo, ProductParameter, Shop
+from .serializers import (CategorySerializer, ProductInfoSerializer,
+                          ProductParameterSerializer, ProductSerializer,
+                          ShopSerializer)
+
 
 class ShopViewSet(viewsets.ModelViewSet):
     queryset = Shop.objects.all()

@@ -1,13 +1,15 @@
 from django.contrib import admin
-from nested_inline.admin import NestedStackedInline, NestedModelAdmin
-from .models import Shop, Category, Product, ProductInfo, ProductParameter
+from nested_inline.admin import NestedModelAdmin, NestedStackedInline
+
+from .models import Category, Product, ProductInfo, ProductParameter, Shop
 
 
 @admin.register(Shop)
 class ShopAdmin(admin.ModelAdmin):
     model = Shop
-    list_display = ['id', 'name', 'user']
-    list_editable = ['name', 'user']
+    list_display = ["id", "name", "user"]
+    list_editable = ["name", "user"]
+
 
 class ProductParameterInline(NestedStackedInline):
     model = ProductParameter
@@ -20,8 +22,8 @@ class ProductInfoInline(NestedStackedInline):
 
 class ProductAdmin(NestedModelAdmin):
     model = Product
-    list_display = ['id', 'name', 'category']
-    prepopulated_fields = {'slug': ('name',)}
+    list_display = ["id", "name", "category"]
+    prepopulated_fields = {"slug": ("name",)}
     inlines = [ProductInfoInline]
 
 

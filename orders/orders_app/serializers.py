@@ -1,19 +1,27 @@
 from rest_framework import serializers
-from .models import Product, ProductInfo, ProductParameter, Shop, Category
+
+from .models import Category, Product, ProductInfo, ProductParameter, Shop
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'name',)
-        read_only_fields = ('id',)
+        fields = (
+            "id",
+            "name",
+        )
+        read_only_fields = ("id",)
 
 
 class ShopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shop
-        fields = ('id', 'name', 'state',)
-        read_only_fields = ('id',)
+        fields = (
+            "id",
+            "name",
+            "state",
+        )
+        read_only_fields = ("id",)
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -21,7 +29,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('name', 'category',)
+        fields = (
+            "name",
+            "category",
+        )
 
 
 class ProductParameterSerializer(serializers.ModelSerializer):
@@ -29,7 +40,10 @@ class ProductParameterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductParameter
-        fields = ('parameter', 'value',)
+        fields = (
+            "parameter",
+            "value",
+        )
 
 
 class ProductInfoSerializer(serializers.ModelSerializer):
@@ -38,5 +52,14 @@ class ProductInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductInfo
-        fields = ('id', 'model', 'product', 'shop', 'quantity', 'price', 'price_rrc', 'product_parameters',)
-        read_only_fields = ('id',)
+        fields = (
+            "id",
+            "model",
+            "product",
+            "shop",
+            "quantity",
+            "price",
+            "price_rrc",
+            "product_parameters",
+        )
+        read_only_fields = ("id",)

@@ -1,4 +1,5 @@
 from decimal import Decimal
+
 from django.conf import settings
 from orders_app.models import Product
 
@@ -21,15 +22,17 @@ class Cart:
         """
         product_id = str(product.id)
         if product_id not in self.cart:
-        # тут ссылаемся на другую таблу
+            # тут ссылаемся на другую таблу
             for product_inf in product.product_infos.all():
-                self.cart[product_id] = {'quantity': 0,
-                                         'price': str(product_inf.price),
-                                         'shop': str(product_inf.shop)}
+                self.cart[product_id] = {
+                    "quantity": 0,
+                    "price": str(product_inf.price),
+                    "shop": str(product_inf.shop),
+                }
         if override_quantity:
-            self.cart[product_id]['quantity'] = quantity
+            self.cart[product_id]["quantity"] = quantity
         else:
-            self.cart[product_id]['quantity'] += quantity
+            self.cart[product_id]["quantity"] += quantity
         self.save()
 
     def save(self):
@@ -54,20 +57,22 @@ class Cart:
         products = Product.objects.filter(id__in=product_ids)
         cart = self.cart.copy()
         for product in products:
-            cart[str(product.id)]['product'] = product
+            cart[str(product.id)]["product"] = product
         for item in cart.values():
-            item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['quantity']
+            item["price"] = Decimal(item["price"])
+            item["total_price"] = item["price"] * item["quantity"]
             yield item
 
     def __len__(self):
         """
         Count all items in the cart
         """
-        return sum(item['quantity'] for item in self.cart.values())
+        return sum(item["quantity"] for item in self.cart.values())
 
     def get_total_price(self):
-        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+        return sum(
+            Decimal(item["price"]) * item["quantity"] for item in self.cart.values()
+        )
 
     def clear(self):
         # remove cart from session
