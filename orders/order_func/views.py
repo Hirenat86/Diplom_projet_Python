@@ -8,6 +8,16 @@ from .models import Order, OrderItem
 
 
 def order_create(request):
+    """
+      Представление для создания заказа.
+
+      Обрабатывает данные из корзины и формы оформления заказа.
+      После успешного сохранения заказа:
+        - создаются объекты OrderItem для каждого товара в корзине,
+        - покупателю отправляется email-уведомление о заказе,
+        - продавцу (магазину) отправляется email-уведомление о заказе.
+    """
+
     cart = Cart(request)
     if request.method == "POST":
         form = OrderCreateForm(request.POST)

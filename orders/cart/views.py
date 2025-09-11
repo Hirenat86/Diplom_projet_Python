@@ -8,6 +8,22 @@ from .forms import CartAddProductForm
 
 @require_POST
 def cart_add(request, product_id):
+    """
+    Представление для добавления товара в корзину.
+
+    Получает объект продукта по его ID, валидирует форму CartAddProductForm
+    и добавляет товар в корзину (с указанным количеством и параметром
+    перезаписи количества).
+
+    Args:
+        request (HttpRequest): Объект запроса (должен содержать POST-данные).
+        product_id (int): ID продукта, который нужно добавить.
+
+    Returns:
+        HttpResponseRedirect: перенаправление на страницу корзины
+        ("cart:cart_detail").
+    """
+
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     form = CartAddProductForm(request.POST)
@@ -21,6 +37,20 @@ def cart_add(request, product_id):
 
 @require_POST
 def cart_remove(request, product_id):
+    """
+    Представление для удаления товара из корзины.
+
+    Получает объект продукта по его ID и удаляет его из корзины.
+
+    Args:
+        request (HttpRequest): Объект запроса.
+        product_id (int): ID продукта, который нужно удалить.
+
+    Returns:
+        HttpResponseRedirect: перенаправление на страницу корзины
+        ("cart:cart_detail").
+    """
+
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
@@ -28,6 +58,19 @@ def cart_remove(request, product_id):
 
 
 def cart_detail(request):
+    """
+    Представление для отображения содержимого корзины.
+
+    Для каждого товара в корзине добавляется форма обновления количества.
+    Возвращает страницу с деталями корзины.
+
+    Args:
+        request (HttpRequest): Объект запроса.
+
+    Returns:
+        HttpResponse: шаблон "cart/detail.html" с данными корзины.
+    """
+
     cart = Cart(request)
     for item in cart:
         item["update_quantity_form"] = CartAddProductForm(

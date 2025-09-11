@@ -19,6 +19,16 @@ USER_TYPE_CHOICES = (
 
 
 class Shop(models.Model):
+    """
+        Модель магазина.
+
+        Атрибуты:
+            name (str): Название магазина.
+            url (str): URL-адрес магазина (необязательный).
+            user (User): Пользователь, связанный с магазином.
+            filename (str): Имя файла с загруженными данными.
+    """
+
     name = models.CharField(max_length=50, verbose_name="Название")
     url = models.URLField(verbose_name="Ссылка", null=True, blank=True)
     user = models.OneToOneField(
@@ -40,6 +50,15 @@ class Shop(models.Model):
 
 
 class Category(models.Model):
+    """
+        Модель категории товаров.
+
+        Атрибуты:
+            shops (QuerySet[Shop]): Магазины, в которых есть данная категория.
+            name (str): Название категории.
+            slug (str): URL-friendly идентификатор категории.
+    """
+
     shops = models.ManyToManyField(
         Shop, verbose_name="Магазины", related_name="categories", blank=True
     )
@@ -58,10 +77,26 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        """
+                Возвращает абсолютный URL категории для построения ссылок.
+
+                Returns:
+                    str: URL страницы с товарами данной категории.
+        """
+
         return reverse("orders_app:product_list_by_category", args=[self.slug])
 
 
 class Product(models.Model):
+    """
+        Модель продукта.
+
+        Атрибуты:
+            category (Category): Категория товара.
+            name (str): Название продукта.
+            slug (str): URL-friendly идентификатор продукта.
+    """
+
     category = models.ForeignKey(
         Category,
         verbose_name="Категория",
@@ -81,10 +116,29 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        """
+                Возвращает абсолютный URL продукта для построения ссылок.
+
+                Returns:
+                    str: URL страницы с деталями продукта.
+        """
+
         return reverse("orders_app:product_detail", args=[self.id, self.slug])
 
 
 class ProductInfo(models.Model):
+    """
+        Дополнительная информация о продукте в магазине.
+
+        Атрибуты:
+            product (Product): Продукт, к которому относится информация.
+            shop (Shop): Магазин, где представлен продукт.
+            model (str): Модель товара.
+            quantity (int): Количество на складе.
+            price (int): Цена товара.
+            price_rrc (int): Рекомендуемая розничная цена.
+    """
+
     product = models.ForeignKey(
         Product,
         verbose_name="Продукт",
@@ -122,6 +176,15 @@ class Parameter(models.Model):
 
 
 class ProductParameter(models.Model):
+    """
+        Модель значения параметра для конкретного товара.
+
+        Атрибуты:
+            product_info (ProductInfo): Ссылка на информацию о продукте.
+            parameter (Parameter): Название параметра.
+            value (str): Значение параметра (например, "синий", "42").
+    """
+
     product_info = models.ForeignKey(
         ProductInfo,
         verbose_name="Информация о продукте",
